@@ -6,5 +6,17 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/wait.h>
+#include <sys/types.>
+
+/* Function prototypes */
+void hsh(void);
+int myBuiltin(char *command);
+char *find_command(char *command);
+int execute_command(char **tokens);
+char **parse_command(char *command);
+int exec_cmd(char *cmd);
+char *dupli_char(char c, int n);
+char *find_cmd_path(char *cmd);
+void exit_shell(void);
 
 #endif /* SHELL_H */
