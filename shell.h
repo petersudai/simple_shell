@@ -8,6 +8,9 @@
 #include <sys/wait.h>
 #include <sys/types.>
 
+#define MAX_TOKENS 20 /* Maximum number of tokens in a command */
+#define MAX_TOKEN_LENGTH 100 /* Maximum length of a single token */
+
 /* Function prototypes */
 void hsh(void);
 int myBuiltin(char *command);

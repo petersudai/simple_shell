@@ -7,9 +7,6 @@
  * Return: An array of strings representing the parsed tokens.
  */
 
-#define MAX_TOKENS 20
-#define MAX_TOKEN_LENGTH 100
-
 char **parse_command(char *command)
 {
 	char **tokens = (char **)malloc(MAX_TOKENS * sizeof(char *));
