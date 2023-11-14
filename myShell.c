@@ -8,6 +8,12 @@ char *find_command(char *command);
 int myBuiltin(char *command);
 void fork_command(char *path);
 
+/**
+ * hsh - main shell loop
+ *
+ * Return: void
+ */
+
 void hsh(void)
 {
 	char command[MAX_COMMAND_LENGTH];
