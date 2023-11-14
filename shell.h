@@ -6,7 +6,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/wait.h>
-#include <sys/types.>
+#include <sys/types.h>
 
 #define MAX_TOKENS 20 /* Maximum number of tokens in a command */
 #define MAX_TOKEN_LENGTH 100 /* Maximum length of a single token */
