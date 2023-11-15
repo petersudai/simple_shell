@@ -48,3 +48,34 @@ char *strConcat(char *dest, char *src)
 	dest[dest_len + i] = '\0';
 	return (dest);
 }
+
+/**
+ * strFree - Frees memory allocated for string
+ * @str: string to free
+ */
+void strFree(char *str)
+{
+	free(str);
+}
+
+/**
+ * strDuplicate - Duplicates a string.
+ * @str: The string to duplicate.
+ *
+ * Return: The duplicated string.
+ */
+char *strDuplicate(const char *str)
+{
+	size_t len;
+	char *duplicate;
+
+	len = strlen(str) + 1;
+	duplicate = malloc(len);
+	if (duplicate == NULL)
+	{
+		perror("malloc");
+		exit(EXIT_FAILURE);
+	}
+	strcpy(duplicate, str);
+	return (duplicate);
+}

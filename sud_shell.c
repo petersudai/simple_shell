@@ -52,6 +52,8 @@ char *findCommandPath(char *cmd)
 void forkCommand(char *cmd, char **args)
 {
 	pid_t childPid;
+	int inputFile, outputFile;
+	char *env[2];
 
 	childPid = fork();
 	if (childPid == -1)
@@ -61,103 +63,36 @@ void forkCommand(char *cmd, char **args)
 	}
 	if (childPid == 0)
 	{
-		if (execv(cmd, args) == -1)
+		inputFile = open("input.txt", O_RDONLY);
+
+		if (inputFile != -1)
 		{
-			perror("execv");
+			if (dup2(inputFile, STDIN_FILENO) == -1)
+			{
+				perror("dup2 input");
+				exit(EXIT_FAILURE);
+			}
+			close(inputFile);
+		}
+		outputFile = open("output.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (outputFile != -1)
+		{
+			if (dup2(outputFile, STDOUT_FILENO) == -1)
+			{
+				perror("dup2 output");
+				exit(EXIT_FAILURE);
+			}
+			close(outputFile);
+		}
+		env[0] = "PATH=/bin:/usr/bin";
+		env[1] = NULL;
+
+		if (execve(cmd, args, env) == -1)
+		{
+			perror("execve");
 			exit(EXIT_FAILURE);
 		}
 	}
 	else
 	    wait(NULL);
-}
-
-/**
- * main - entry point
- *
- * Return: void
- */
-
-int main(void)
-{
-	char *input;
-	size_t inputSize = MAX_INPUT_SIZE;
-	ssize_t charsRead;
-	int background;
-
-	while (1)
-	{
-		printf("$ ");
-		input = (char *)malloc(inputSize);
-		if (input == NULL)
-		{
-			perror("malloc");
-			exit(EXIT_FAILURE);
-		}
-
-		charsRead = getline(&input, &inputSize, stdin);
-		if (charsRead == -1)
-		{
-			if (feof(stdin))
-			{
-				printf("\n");
-				break;
-			}
-			else
-			{
-				perror("getline");
-				exit(EXIT_FAILURE);
-			}
-		}
-		input[charsRead - 1] = '\0';
-
-		if (strCompare(input, "exit") == 0)
-		{
-			printf("Exitng the Shell!\n");
-			free(input);
-			exit(EXIT_SUCCESS);
-		}
-
-		background = 0;
-		if (input[charsRead - 2] == '&')
-		{
-			background = 1;
-			input[charsRead -2] = '\0';
-		}
-
-		if (isBuiltin(input))
-		{
-			printf("Executing built-in command:%s\n", input);
-		}
-		else
-		{
-			char *cmdPath = findCommandPath(input);
-			char **args;
-
-			if (cmdPath != NULL)
-			{
-				printf("Executing command:%s\n", cmdPath);
-				args = (char **)malloc(2 * sizeof(char *));
-				if (args == NULL)
-				{
-					perror("malloc");
-					exit(EXIT_FAILURE);
-				}
-				args[0] = cmdPath;
-				args[1] = NULL;
-
-				forkCommand(cmdPath, args);
-
-				if (!background)
-					wait(NULL);
-				free(args);
-				free(cmdPath);
-			}
-			else
-			{
-				printf("Command not found: %s\n", input);
-			}
-		}
-		free(input);
-	}
-	return (0);
 }
