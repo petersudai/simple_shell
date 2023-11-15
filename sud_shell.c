@@ -1,4 +1,5 @@
 #include "shell.h"
+#include <unistd.h>
 
 #define MAX_INPUT_SIZE 1024
 
@@ -90,7 +91,7 @@ void handleOutputRedirection(void)
  */
 void execute_Command(char *cmd, char **args)
 {
-	if (execve(cmd, args, environ) == -1)
+	if (execve(cmd, args, NULL) == -1)
 	{
 		perror("execve");
 		exit(EXIT_FAILURE);

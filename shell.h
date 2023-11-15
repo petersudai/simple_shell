@@ -21,10 +21,15 @@ char *strConcat(char *dest, char *src);
 void strFree(char *str);
 char *strDuplicate(const char *str);
 
-/* sud_shell.c */
+/* sud_shell.c and sud_shell2.c */
 int isBuiltin(char *cmd);
 char *findCommandPath(char *cmd);
+void handleInputRedirection(void);
+void handleOutputRedirection(void);
+void execute_Command(char *cmd, char **args);
+void forkNewProcess(char *cmd, char **args);
 void forkCommand(char *cmd, char **args);
+
 
 /* parser.c function prototypes */
 int isExecutable(char *file_path);
