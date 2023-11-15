@@ -49,11 +49,13 @@ int exec_cmd(char *cmd)
 {
 	char *path = find_cmd_path(cmd);
 
-	if (path != NULL)
+	if (path != NULL && access(path, X_OK) == 0)
 	{
 		free(path);
 		return (0);
 	}
+	if (path != NULL)
+		free(path);
 	return (-1);
 }
 

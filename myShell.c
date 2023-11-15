@@ -103,14 +103,18 @@ int execute_command(char **tokens)
 	}
 	else
 	{
-		while ((wpid = waitpid(pid, &status, WUNTRACED)) > 0)
+		int attempts = 0;
+
+		while ((wpid = waitpid(pid, &status, WUNTRACED)) > 0 && attempts < MAX_WAIT_ATTEMPTS)
 		{
 			if (WIFEXITED(status) || WIFSIGNALED(status))
 				break;
+			attempts++;
 		}
-		if (wpid == -1)
+		if (attempts >= MAX_WAIT_ATTEMPTS)
 		{
-			perror("waitpid");
+			fprintf(stderr, "Error waiting for child process to exit\n");
+			kill(pid, SIGKILL);
 			exit(EXIT_FAILURE);
 		}
 	}

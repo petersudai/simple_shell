@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 			tokens = parse_command(argv[i]);
 			execute_command(tokens);
 
-			for (i = 0; tokens[j] != NULL; j++)
+			for (j = 0; tokens[j] != NULL; j++)
 				free(tokens[j]);
 			free(tokens);
 		}
