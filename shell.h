@@ -13,20 +13,19 @@
 #include <sys/types.h>
 
 /* String Prototypes from strings.c */
-int _strlen(char *s);
-int _strcmp(char *s1, char *s2);
-char *_strcat(char *dest, char *src);
+int strLength(char *s);
+int strCompare(char *s1, char *s2);
+char *strConcat(char *dest, char *src);
 
 /* sud_shell.c */
-int find_builtin(char *cmd);
-char *find_cmd(char *cmd);
-void fork_cmd(char *cmd);
+int isBuiltin(char *cmd);
+char *findCommandPath(char *cmd);
+void forkCommand(char *cmd, char **args);
 
 /* parser.c function prototypes */
-int is_cmd(char *file_path);
-char *dup_chars(const char *str);
-char *find_path(char *cmd)
-void *malloc(size_t size);
+int isExecutable(char *file_path);
+char *duplicateString(const char *str);
+char *findPath(char *cmd);
 
 #endif /* SHELL_H */
 
