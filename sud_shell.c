@@ -91,7 +91,11 @@ void handleOutputRedirection(void)
  */
 void execute_Command(char *cmd, char **args)
 {
-	if (execve(cmd, args, NULL) == -1)
+	char *env[2];
+
+	env[0] = "PATH=/usr/bin";
+	env[1] = NULL;
+	if (execve(cmd, args, env) == -1)
 	{
 		perror("execve");
 		exit(EXIT_FAILURE);

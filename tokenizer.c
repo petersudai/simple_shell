@@ -14,6 +14,7 @@ char **tokenizeInput(char *input)
 	int i;
 	char **args;
 	char *token;
+
 	args = malloc(MAX_ARGS * sizeof(char *));
 	if (args == NULL)
 	{
@@ -52,7 +53,11 @@ char **tokenizeInput(char *input)
 
 void freeArgs(char **args)
 {
+	if (args == NULL)
+		return;
+
 	int i;
+
 	for (i = 0; args[i] != NULL; i++)
 		strFree(args[i]);
 	free(args);
