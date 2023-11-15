@@ -66,7 +66,8 @@ void hsh(void)
 
 int execute_command(char **tokens)
 {
-	pid_t pid;
+	pid_t pid, wpid;
+	int status;
 
 	if (myBuiltin(tokens[0]) == 0)
 		return (0);
@@ -84,8 +85,12 @@ int execute_command(char **tokens)
 
 		if (path != NULL)
 		{
-			fork_command(path);
-			free(path);
+			if (execve(path, tokens, NULL) == -1)
+			{
+				perror("execve");
+				free(path);
+				exit(EXIT_FAILURE);
+			}
 		}
 		else
 		{
@@ -95,24 +100,18 @@ int execute_command(char **tokens)
 	}
 	else
 	{
-		int status;
-
-		waitpid(pid, &status, 0);
-
-		if (WIFEXITED(status))
-		{
-			/* child process exited normally */
-			return (WEXITSTATUS(status));
-		}
-		else
-		{
-			/* child process not exited normally */
-			perror("Child process not exited mormally");
-			return (-1);
-		}
+		do {
+			wpid = waitpid(pid, &status, WUNTRACED);
+			if (wpid == -1)
+			{
+				perror("waitpid");
+				exit(EXIT_FAILURE);
+			}
+		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
 	}
 	return (0);
 }
+
 /**
  * fork_command - this is used to fork
  * @path: forked path
