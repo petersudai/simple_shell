@@ -82,6 +82,7 @@ int main(void)
 	char *input;
 	size_t inputSize = MAX_INPUT_SIZE;
 	ssize_t charsRead;
+	int background;
 
 	while (1)
 	{
@@ -109,6 +110,20 @@ int main(void)
 		}
 		input[charsRead - 1] = '\0';
 
+		if (strCompare(input, "exit") == 0)
+		{
+			printf("Exitng the Shell!\n");
+			free(input);
+			exit(EXIT_SUCCESS);
+		}
+
+		background = 0;
+		if (input[charsRead - 2] == '&')
+		{
+			background = 1;
+			input[charsRead -2] = '\0';
+		}
+
 		if (isBuiltin(input))
 		{
 			printf("Executing built-in command:%s\n", input);
@@ -132,7 +147,10 @@ int main(void)
 
 				forkCommand(cmdPath, args);
 
+				if (!background)
+					wait(NULL);
 				free(args);
+				free(cmdPath);
 			}
 			else
 			{
