@@ -45,60 +45,54 @@ char *findCommandPath(char *cmd)
 }
 
 /**
- * forkCommand - Forks new process to run the command.
- * @cmd: command to be executed
- * @args: command line argument
+ * handleInputRedirection - handles input redirection for child process
  */
-void forkCommand(char *cmd, char **args)
+void handleInputRedirection(void)
 {
-	pid_t childPid;
-	int inputFile, outputFile;
-	char *env[2];
+	int inputFile;
 
-	if (cmd == NULL || args == NULL)
+	inputFile = open("input.txt", O_RDONLY);
+	if (inputFile != -1)
 	{
-		printf("Error: NULL command or arguments\n");
-		exit(EXIT_FAILURE);
-	}
-
-	childPid = fork();
-	if (childPid == -1)
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
-	if (childPid == 0)
-	{
-		inputFile = open("input.txt", O_RDONLY);
-
-		if (inputFile != -1)
+		if (dup2(inputFile, STDIN_FILENO) == -1)
 		{
-			if (dup2(inputFile, STDIN_FILENO) == -1)
-			{
-				perror("dup2 input");
-				exit(EXIT_FAILURE);
-			}
-			close(inputFile);
-		}
-		outputFile = open("output.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (outputFile != -1)
-		{
-			if (dup2(outputFile, STDOUT_FILENO) == -1)
-			{
-				perror("dup2 output");
-				exit(EXIT_FAILURE);
-			}
-			close(outputFile);
-		}
-		env[0] = "PATH=/bin:/usr/bin";
-		env[1] = NULL;
-
-		if (execve(cmd, args, env) == -1)
-		{
-			perror("execve");
+			perror("dup2 input");
 			exit(EXIT_FAILURE);
 		}
+		close(inputFile);
 	}
-	else
-	    wait(NULL);
+}
+
+/**
+ * handleOutputRedirection - Handles output redirection for the child process
+ */
+void handleOutputRedirection(void)
+{
+	int outputFile;
+
+	outputFile = open("output.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (outputFile != -1)
+	{
+		if (dup2(outputFile, STDOUT_FILENO) == -1)
+		{
+			perror("dup2 output");
+			exit(EXIT_FAILURE);
+		}
+		close(outputFile);
+	}
+}
+
+/**
+ * execute_Command - Executes the command in the child process
+ *
+ * @cmd: command to execute
+ * @args: arguments for command
+ */
+void execute_Command(char *cmd, char **args)
+{
+	if (execve(cmd, args, environ) == -1)
+	{
+		perror("execve");
+		exit(EXIT_FAILURE);
+	}
 }
