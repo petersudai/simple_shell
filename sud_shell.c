@@ -55,6 +55,12 @@ void forkCommand(char *cmd, char **args)
 	int inputFile, outputFile;
 	char *env[2];
 
+	if (cmd == NULL || args == NULL)
+	{
+		printf("Error: NULL command or arguments\n");
+		exit(EXIT_FAILURE);
+	}
+
 	childPid = fork();
 	if (childPid == -1)
 	{
