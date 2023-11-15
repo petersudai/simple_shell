@@ -32,7 +32,9 @@ void hsh(void)
 
 		command[strcspn(command, "\n")] = '\0';
 
+		printf("Before parse_command\n");
 		tokens = parse_command(command);
+		printf("After parse_command\n");
 
 		if (tokens[0] != NULL)
 		{
@@ -88,6 +90,7 @@ int execute_command(char **tokens)
 			if (execve(path, tokens, NULL) == -1)
 			{
 				perror("execve");
+				fprintf(stderr, "Error executing command: %s\n", tokens[0]);
 				free(path);
 				exit(EXIT_FAILURE);
 			}
@@ -100,14 +103,16 @@ int execute_command(char **tokens)
 	}
 	else
 	{
-		do {
-			wpid = waitpid(pid, &status, WUNTRACED);
-			if (wpid == -1)
-			{
-				perror("waitpid");
-				exit(EXIT_FAILURE);
-			}
-		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
+		while ((wpid = waitpid(pid, &status, WUNTRACED)) > 0)
+		{
+			if (WIFEXITED(status) || WIFSIGNALED(status))
+				break;
+		}
+		if (wpid == -1)
+		{
+			perror("waitpid");
+			exit(EXIT_FAILURE);
+		}
 	}
 	return (0);
 }
