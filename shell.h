@@ -10,7 +10,7 @@
 
 #define MAX_TOKENS 20 /* Maximum number of tokens in a command */
 #define MAX_TOKEN_LENGTH 100 /* Maximum length of a single token */
-#define MAX_WAIT_ATTEMPTS 1000 /* Maximum number of attempts to wait for child process */
+#define MAX_WAIT_ATTEMPTS 1000 /* Max no. of attempts to wait 4child process */
 
 /* Function prototypes */
 void hsh(void);

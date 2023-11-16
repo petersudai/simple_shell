@@ -105,7 +105,8 @@ int execute_command(char **tokens)
 	{
 		int attempts = 0;
 
-		while ((wpid = waitpid(pid, &status, WUNTRACED)) > 0 && attempts < MAX_WAIT_ATTEMPTS)
+		while ((wpid = waitpid(pid, &status, WUNTRACED)) >
+				0 && attempts < MAX_WAIT_ATTEMPTS)
 		{
 			if (WIFEXITED(status) || WIFSIGNALED(status))
 				break;
