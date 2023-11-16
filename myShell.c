@@ -20,10 +20,11 @@ void hsh(void)
 	int i;
 	char **tokens;
 	char *command_path;
+	char prompt[] = "$ ";
 
 	while (1)
 	{
-		printf("$ ");
+		printf("%s", prompt);
 		if (fgets(command, sizeof(command), stdin) == NULL)
 		{
 			printf("\n");
