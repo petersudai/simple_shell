@@ -132,7 +132,6 @@ int execute_command(char **tokens)
 
 void fork_command(char *path)
 {
-	extern char **environ;
 	char **argv;
 
 	argv = (char **)malloc(2 * sizeof(char *));

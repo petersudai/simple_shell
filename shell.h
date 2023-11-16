@@ -7,6 +7,11 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <sys/types.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <limits.h>
+
+extern char **environ;
 
 #define MAX_TOKENS 20 /* Maximum number of tokens in a command */
 #define MAX_TOKEN_LENGTH 100 /* Maximum length of a single token */
