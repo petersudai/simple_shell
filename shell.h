@@ -4,50 +4,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <sys/wait.h>
 #include <string.h>
-#include <sys/stat.h>
-#include <limits.h>
-#include <fcntl.h>
-#include <errno.h>
+#include <sys/wait.h>
 #include <sys/types.h>
 
-#define MAX_INPUT_SIZE 1024
+#define MAX_TOKENS 20 /* Maximum number of tokens in a command */
+#define MAX_TOKEN_LENGTH 100 /* Maximum length of a single token */
+#define MAX_WAIT_ATTEMPTS 1000 /* Maximum number of attempts to wait for child process */
 
-/* String Prototypes from strings.c */
-int strLength(char *s);
-int strCompare(char *s1, char *s2);
-char *strConcat(char *dest, char *src);
-void strFree(char *str);
-char *strDuplicate(const char *str);
-
-/* sud_shell.c and sud_shell2.c */
-int isBuiltin(char *cmd);
-char *findCommandPath(char *cmd);
-void handleInputRedirection(void);
-void handleOutputRedirection(void);
-void execute_Command(char *cmd, char **args);
-void forkNewProcess(char *cmd, char **args);
-void forkCommand(char *cmd, char **args);
-
-
-/* parser.c function prototypes */
-int isExecutable(char *file_path);
-char *duplicateString(const char *str);
-char *findPath(char *cmd);
-
-/* tokenizer.c */
-char **tokenizeInput(char *input);
-void freeArgs(char **args);
-
-/* Function prototypes from shell.c */
-void processInput(char *input);
-
-/* Function prototypes from command_execution.c */
-void executeCommand(char *input, int background);
-
-/* Function prototypes from input_handler.c */
-char *getCommand(void);
+/* Function prototypes */
+void hsh(void);
+int myBuiltin(char *command);
+char *find_command(char *command);
+int execute_command(char **tokens);
+char **parse_command(char *command);
+int exec_cmd(char *cmd);
+char *dupli_char(char c, int n);
+char *find_cmd_path(char *cmd);
+void exit_shell(void);
 
 #endif /* SHELL_H */
-

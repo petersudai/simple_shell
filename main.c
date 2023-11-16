@@ -1,21 +1,31 @@
 #include "shell.h"
 
 /**
- * main - main shell function
+ * main - Entry point of the program
+ * @argc: the number of arguments
+ * @argv: the array of arguments
  *
- * Return: void
+ * Return: 0 on success
  */
-
-int main(void)
+int main(int argc, char *argv[])
 {
-	char *input;
+	int i, j;
+	char **tokens;
 
-	while (1)
+	if (argc > 1)
 	{
-		input = getCommand();
-		processInput(input);
-		free(input);
+		for (i = 1; i < argc; i++)
+		{
+			tokens = parse_command(argv[i]);
+			execute_command(tokens);
+
+			for (j = 0; tokens[j] != NULL; j++)
+				free(tokens[j]);
+			free(tokens);
+		}
 	}
+	else
+		hsh();
 
 	return (0);
 }
