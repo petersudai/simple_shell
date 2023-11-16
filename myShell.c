@@ -170,6 +170,11 @@ int myBuiltin(char *command)
 	{
 		return (1);
 	}
+	else if (strcmp(command, "env") == 0)
+	{
+		print_environment();
+		return (1);
+	}
 	return (0);
 }
 

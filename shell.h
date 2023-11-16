@@ -22,5 +22,6 @@ int exec_cmd(char *cmd);
 char *dupli_char(char c, int n);
 char *find_cmd_path(char *cmd);
 void exit_shell(void);
+void print_environment(void);
 
 #endif /* SHELL_H */
