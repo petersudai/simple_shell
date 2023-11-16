@@ -132,6 +132,7 @@ int execute_command(char **tokens)
 
 void fork_command(char *path)
 {
+	extern char **environ;
 	char **argv;
 
 	argv = (char **)malloc(2 * sizeof(char *));
@@ -144,7 +145,7 @@ void fork_command(char *path)
 	argv[0] = path;
 	argv[1] = NULL;
 
-	if (execve(path, argv, NULL) == -1)
+	if (execve(path, argv, environ) == -1)
 	{
 		perror("execve");
 		exit(EXIT_FAILURE);
@@ -164,7 +165,7 @@ int myBuiltin(char *command)
 	if (strcmp(command, "exit") == 0)
 	{
 		exit_shell();
-		return 1;
+		return (1);
 	}
 	else if (strcmp(command, "cd") == 0)
 	{
