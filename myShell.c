@@ -163,7 +163,8 @@ int myBuiltin(char *command)
 	/* Check if the command is a built-in command */
 	if (strcmp(command, "exit") == 0)
 	{
-		exit(0);
+		exit_shell();
+		return 1;
 	}
 	else if (strcmp(command, "cd") == 0)
 	{
