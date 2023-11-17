@@ -1,4 +1,4 @@
-#include "shell.hi"
+#include "shell.h"
 
 #define MAX_COMMAND_LENGTH 100
 #define MAX_PATH_LENGTH 1024
