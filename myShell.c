@@ -1,4 +1,4 @@
-#include "shell.h"
+#include "shell.hi"
 
 #define MAX_COMMAND_LENGTH 100
 #define MAX_PATH_LENGTH 1024
@@ -18,6 +18,7 @@ void hsh(void)
 {
 	char command[MAX_COMMAND_LENGTH];
 	int i;
+	char *args[MAX_COMMAND_LENGTH];
 	char **tokens;
 	char *command_path;
 	char prompt[] = "$ ";
@@ -36,9 +37,16 @@ void hsh(void)
 
 		command[strcspn(command, "\n")] = '\0';
 
-		printf("Before parse_command\n");
+		args[0] = strtok(command, " ");
+		int argCount = 1;
+
+		while (argCount < MAX_COMMAND_LENGTH &&
+				(args[argCount] = strtok(NULL, " ")) != NULL)
+		{
+			argcount++;
+		}
+
 		tokens = parse_command(command);
-		printf("After parse_command\n");
 
 		if (tokens[0] != NULL)
 		{
