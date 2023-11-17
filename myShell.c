@@ -27,8 +27,11 @@ void hsh(void)
 		printf("%s", prompt);
 		if (fgets(command, sizeof(command), stdin) == NULL)
 		{
+			if (feof(stdin))
+			{
 			printf("\n");
 			break;
+			}
 		}
 
 		command[strcspn(command, "\n")] = '\0';
