@@ -56,6 +56,7 @@ void hsh(void)
 			command_path = find_command(tokens[0]);
 			if (command_path != NULL)
 			{
+				execute_command(tokens);
 				fork_command(command_path);
 				free(command_path);
 			}
