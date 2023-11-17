@@ -17,7 +17,7 @@ void fork_command(char *path);
 void hsh(void)
 {
 	char command[MAX_COMMAND_LENGTH];
-	int i;
+	int i, argCount;
 	char *args[MAX_COMMAND_LENGTH];
 	char **tokens;
 	char *command_path;
@@ -38,12 +38,13 @@ void hsh(void)
 		command[strcspn(command, "\n")] = '\0';
 
 		args[0] = strtok(command, " ");
-		int argCount = 1;
+
+		argCount = 1;
 
 		while (argCount < MAX_COMMAND_LENGTH &&
 				(args[argCount] = strtok(NULL, " ")) != NULL)
 		{
-			argcount++;
+			argCount++;
 		}
 
 		tokens = parse_command(command);
@@ -70,68 +71,6 @@ void hsh(void)
 			free(tokens[i]);
 		free(tokens);
 	}
-}
-
-/**
- * execute_command - execute an external command
- * @tokens: array of strings repping the command and its arguements
- * Return: 0 success, -1 fail
- */
-
-int execute_command(char **tokens)
-{
-	pid_t pid, wpid;
-	int status;
-
-	if (myBuiltin(tokens[0]) == 0)
-		return (0);
-
-	pid = fork();
-
-	if (pid == -1)
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
-	else if (pid == 0)
-	{
-		char *path = find_command(tokens[0]);
-
-		if (path != NULL)
-		{
-			if (execve(path, tokens, NULL) == -1)
-			{
-				perror("execve");
-				fprintf(stderr, "Error executing command: %s\n", tokens[0]);
-				free(path);
-				exit(EXIT_FAILURE);
-			}
-		}
-		else
-		{
-			fprintf(stderr, "Command not found: %s\n", tokens[0]);
-			exit(EXIT_FAILURE);
-		}
-	}
-	else
-	{
-		int attempts = 0;
-
-		while ((wpid = waitpid(pid, &status, WUNTRACED)) >
-				0 && attempts < MAX_WAIT_ATTEMPTS)
-		{
-			if (WIFEXITED(status) || WIFSIGNALED(status))
-				break;
-			attempts++;
-		}
-		if (attempts >= MAX_WAIT_ATTEMPTS)
-		{
-			fprintf(stderr, "Error waiting for child process to exit\n");
-			kill(pid, SIGKILL);
-			exit(EXIT_FAILURE);
-		}
-	}
-	return (0);
 }
 
 /**

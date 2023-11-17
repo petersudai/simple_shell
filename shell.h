@@ -28,5 +28,7 @@ char *dupli_char(char c, int n);
 char *find_cmd_path(char *cmd);
 void exit_shell(void);
 void print_environment(void);
+void execute_child(char **tokens);
+void handle_parent(pid_t pid, int *status);
 
 #endif /* SHELL_H */
